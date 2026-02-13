@@ -1,11 +1,30 @@
+import { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
+import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { AuthProvider } from './src/auth/AuthProvider';
 import { RootNavigator } from './src/navigation/RootNavigator';
 import { getApiBaseUrlOrThrow } from './src/services/api/config';
+import { fontAssets, typography } from './src/theme';
+
+void SplashScreen.preventAutoHideAsync().catch(() => {
+  // noop
+});
 
 export default function App() {
+  const [fontsLoaded, fontError] = useFonts(fontAssets);
+
+  useEffect(() => {
+    if (fontsLoaded || fontError) {
+      void SplashScreen.hideAsync().catch(() => {
+        // noop
+      });
+    }
+  }, [fontError, fontsLoaded]);
+
   let startupError: Error | null = null;
 
   try {
@@ -14,22 +33,30 @@ export default function App() {
     startupError = error instanceof Error ? error : new Error(String(error));
   }
 
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
+
   if (startupError) {
     return (
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorTitle}>Configuration Error</Text>
-        <Text style={styles.errorText}>
-          API Base URL not configured. Set EXPO_PUBLIC_API_BASE_URL in .env
-        </Text>
-      </View>
+      <SafeAreaProvider>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorTitle}>Configuration Error</Text>
+          <Text style={styles.errorText}>
+            API Base URL not configured. Set EXPO_PUBLIC_API_BASE_URL in .env
+          </Text>
+        </View>
+      </SafeAreaProvider>
     );
   }
 
   return (
-    <AuthProvider>
-      <StatusBar style="dark" />
-      <RootNavigator />
-    </AuthProvider>
+    <SafeAreaProvider>
+      <AuthProvider>
+        <StatusBar style="auto" />
+        <RootNavigator />
+      </AuthProvider>
+    </SafeAreaProvider>
   );
 }
 
@@ -42,15 +69,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   errorTitle: {
+    ...typography.title,
     color: '#FFFFFF',
-    fontSize: 24,
-    fontWeight: '700',
     marginBottom: 12,
   },
   errorText: {
+    ...typography.body,
     color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '500',
     textAlign: 'center',
   },
 });
