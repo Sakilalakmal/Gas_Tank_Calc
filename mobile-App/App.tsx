@@ -1,28 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
-import { RootNavigator } from './src/app/navigation/RootNavigator';
-import { apiConfig, getApiBaseUrlOrThrow } from './src/services/api/config';
+import { AuthProvider } from './src/auth/AuthProvider';
+import { RootNavigator } from './src/navigation/RootNavigator';
+import { getApiBaseUrlOrThrow } from './src/services/api/config';
 
 export default function App() {
   let startupError: Error | null = null;
-  let baseUrl = '';
 
   try {
-    baseUrl = getApiBaseUrlOrThrow();
+    getApiBaseUrlOrThrow();
   } catch (error) {
     startupError = error instanceof Error ? error : new Error(String(error));
   }
-
-  useEffect(() => {
-    if (startupError) {
-      return;
-    }
-
-    console.log('API BASE URL:', baseUrl);
-    console.log('Platform:', Platform.OS);
-  }, [baseUrl, startupError]);
 
   if (startupError) {
     return (
@@ -36,10 +26,10 @@ export default function App() {
   }
 
   return (
-    <>
+    <AuthProvider>
       <StatusBar style="dark" />
       <RootNavigator />
-    </>
+    </AuthProvider>
   );
 }
 
