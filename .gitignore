@@ -1,0 +1,117 @@
+# =========================
+# OS / Editor
+# =========================
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.tmp
+*.log
+.idea/
+.vscode/
+
+# =========================
+# Root-level dependencies / env
+# =========================
+node_modules/
+.env
+.env.*
+!.env.example
+
+# =========================
+# Laravel Backend (backend/)
+# =========================
+backend/.env
+backend/.env.*
+!backend/.env.example
+
+backend/vendor/
+backend/node_modules/
+
+backend/public/build/
+backend/public/hot
+
+backend/storage/*.key
+backend/storage/logs/*.log
+backend/storage/framework/cache/*
+backend/storage/framework/sessions/*
+backend/storage/framework/views/*
+backend/storage/framework/testing/*
+backend/storage/debugbar/*
+backend/bootstrap/cache/*.php
+backend/bootstrap/cache/*.json
+
+# Keep framework directories tracked but ignore generated content
+!backend/storage/framework/cache/.gitignore
+!backend/storage/framework/sessions/.gitignore
+!backend/storage/framework/views/.gitignore
+!backend/storage/framework/testing/.gitignore
+!backend/storage/logs/.gitignore
+!backend/storage/app/.gitignore
+!backend/storage/app/public/.gitignore
+!backend/storage/app/private/.gitignore
+!backend/bootstrap/cache/.gitignore
+
+# Laravel testing / tools
+backend/.phpunit.result.cache
+backend/.php-cs-fixer.cache
+backend/.pint.cache
+backend/coverage/
+backend/.coverage
+
+# =========================
+# React Native / Expo App (mobile-App/)
+# =========================
+mobile-App/node_modules/
+mobile-App/npm-debug.log*
+mobile-App/yarn-debug.log*
+mobile-App/yarn-error.log*
+mobile-App/pnpm-debug.log*
+
+mobile-App/.expo/
+mobile-App/.expo-shared/
+mobile-App/web-build/
+mobile-App/dist/
+mobile-App/build/
+
+# Metro / React Native caches
+mobile-App/.metro-health-check*
+mobile-App/.metro-cache/
+mobile-App/.rncache/
+mobile-App/.react-native/
+mobile-App/.gradle/
+mobile-App/android/.gradle/
+mobile-App/android/app/build/
+mobile-App/android/build/
+mobile-App/ios/build/
+mobile-App/ios/Pods/
+mobile-App/*.hprof
+
+# TypeScript / bundler caches
+mobile-App/*.tsbuildinfo
+mobile-App/.eslintcache
+mobile-App/.cache/
+mobile-App/.parcel-cache/
+
+# Expo / EAS
+mobile-App/.eas/
+mobile-App/.env
+mobile-App/.env.*
+!mobile-App/.env.example
+
+# Optional local files
+mobile-App/google-services.json
+mobile-App/GoogleService-Info.plist
+
+# =========================
+# Archives / binaries
+# =========================
+*.zip
+*.tar
+*.gz
+*.rar
+*.7z
+*.exe
+*.dll
+*.so
+*.dylib
