@@ -11,4 +11,11 @@ export const colors = {
   success: '#15803D',
   fail: '#B91C1C',
   disabled: '#9CA3AF',
+  authBackground: '#111111',
+  authCard: '#FFFFFF',
+  authText: '#111111',
+  authMuted: '#666666',
+  authBorder: '#DDDDDD',
+  authPrimary: '#000000',
+  authInput: '#E9E9E9',
 } as const;

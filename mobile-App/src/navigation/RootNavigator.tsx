@@ -23,11 +23,11 @@ function AuthStackNavigator() {
   return (
     <AuthStack.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: colors.background },
+        headerShown: false,
+        headerStyle: { backgroundColor: colors.surface },
         headerShadowVisible: false,
         headerTintColor: colors.text,
-        contentStyle: { backgroundColor: colors.background },
-        title: 'Sign In',
+        contentStyle: { backgroundColor: colors.surface },
       }}
     >
       <AuthStack.Screen name="Login" component={LoginScreen} />
