@@ -132,11 +132,12 @@ export function LoginScreen() {
                   ref={epfRef}
                   value={epfNumber}
                   onChangeText={setEpfNumber}
+                  autoCapitalize="none"
                   autoCorrect={false}
                   style={styles.input}
                   placeholder="Enter EPF number"
                   placeholderTextColor={colors.authMuted}
-                  keyboardType="number-pad"
+                  keyboardType={Platform.OS === 'ios' ? 'ascii-capable' : 'default'}
                   returnKeyType="next"
                   blurOnSubmit={false}
                   onSubmitEditing={() => {

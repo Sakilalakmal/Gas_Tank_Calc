@@ -51,33 +51,59 @@ class StockReadingController extends Controller
             ->setStatusCode(201);
     }
 
-    public function latest(): StockReadingResource|JsonResponse
+    public function latest(StockCalculator $calculator): StockReadingResource|JsonResponse
     {
+        $limits = $calculator->getOperationalLimits();
+        $tankCapacityKg = (float) $limits['tank_capacity_kg'];
+        $totalCapacityKg = (float) $limits['total_capacity_kg'];
+
         $latest = StockReading::query()
+            ->where('kg1', '<=', $tankCapacityKg)
+            ->where('kg2', '<=', $tankCapacityKg)
+            ->where('kg3', '<=', $tankCapacityKg)
+            ->where('kg4', '<=', $tankCapacityKg)
+            ->where('total_kg', '<=', $totalCapacityKg)
             ->orderByDesc('recorded_at')
             ->orderByDesc('id')
             ->first();
 
         if (! $latest) {
             return response()->json([
-                'message' => 'No readings yet',
+                'message' => 'No valid readings yet',
             ], 404);
         }
 
         return new StockReadingResource($latest);
     }
 
-    public function index(Request $request)
+    public function index(Request $request, StockCalculator $calculator)
     {
         $validated = $request->validate([
             'limit' => ['nullable', 'integer', 'min:1', 'max:100'],
+            'include_invalid' => ['nullable', 'boolean'],
         ]);
 
         $limit = (int) ($validated['limit'] ?? 20);
+        $includeInvalid = (bool) ($validated['include_invalid'] ?? false);
 
-        $readings = StockReading::query()
+        $query = StockReading::query()
             ->orderByDesc('recorded_at')
-            ->orderByDesc('id')
+            ->orderByDesc('id');
+
+        if (! $includeInvalid) {
+            $limits = $calculator->getOperationalLimits();
+            $tankCapacityKg = (float) $limits['tank_capacity_kg'];
+            $totalCapacityKg = (float) $limits['total_capacity_kg'];
+
+            $query
+                ->where('kg1', '<=', $tankCapacityKg)
+                ->where('kg2', '<=', $tankCapacityKg)
+                ->where('kg3', '<=', $tankCapacityKg)
+                ->where('kg4', '<=', $tankCapacityKg)
+                ->where('total_kg', '<=', $totalCapacityKg);
+        }
+
+        $readings = $query
             ->limit($limit)
             ->get();
 

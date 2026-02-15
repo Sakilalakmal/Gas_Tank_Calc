@@ -14,6 +14,15 @@ class StockReadingResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $tankCapacityKg = (float) config('lpg.tank_capacity_kg', 12000);
+        $totalCapacityKg = (float) config('lpg.total_capacity_kg', 48000);
+        $maxTankPressurePsi = (float) config('lpg.max_tank_pressure_psi', 85.71);
+        $isWithinCapacityLimits = $this->kg1 <= $tankCapacityKg
+            && $this->kg2 <= $tankCapacityKg
+            && $this->kg3 <= $tankCapacityKg
+            && $this->kg4 <= $tankCapacityKg
+            && $this->total_kg <= $totalCapacityKg;
+
         return [
             'id' => $this->id,
             'created_by_user_id' => $this->created_by_user_id,
@@ -31,6 +40,10 @@ class StockReadingResource extends JsonResource
             'recorded_at' => optional($this->recorded_at)->toISOString(),
             'created_at' => optional($this->created_at)->toISOString(),
             'updated_at' => optional($this->updated_at)->toISOString(),
+            'tank_capacity_kg' => $tankCapacityKg,
+            'plant_total_capacity_kg' => $totalCapacityKg,
+            'max_tank_pressure_psi' => $maxTankPressurePsi,
+            'is_within_capacity_limits' => $isWithinCapacityLimits,
         ];
     }
 }

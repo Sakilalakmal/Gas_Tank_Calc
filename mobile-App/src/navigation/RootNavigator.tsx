@@ -4,6 +4,7 @@ import React from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 import { useAuth } from '../auth/useAuth';
+import { GasStockScreen } from '../screens/GasStockScreen';
 import { HomeScreen } from '../screens/HomeScreen';
 import { LoginScreen } from '../screens/LoginScreen';
 import { colors, typography } from '../theme';
@@ -13,6 +14,7 @@ type AuthStackParamList = {
 };
 
 type AppStackParamList = {
+  GasStock: undefined;
   Home: undefined;
 };
 
@@ -38,15 +40,17 @@ function AuthStackNavigator() {
 function AppStackNavigator() {
   return (
     <AppStack.Navigator
+      initialRouteName="Home"
       screenOptions={{
-        headerStyle: { backgroundColor: colors.background },
-        headerShadowVisible: false,
-        headerTintColor: colors.text,
-        contentStyle: { backgroundColor: colors.background },
-        title: 'Home',
+        headerShown: false,
+        contentStyle: { backgroundColor: colors.authBackground },
       }}
     >
       <AppStack.Screen name="Home" component={HomeScreen} />
+      <AppStack.Screen
+        name="GasStock"
+        component={GasStockScreen}
+      />
     </AppStack.Navigator>
   );
 }

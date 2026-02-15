@@ -21,11 +21,13 @@ class StoreStockReadingRequest extends FormRequest
      */
     public function rules(): array
     {
+        $maxTankPressurePsi = (float) config('lpg.max_tank_pressure_psi', 85.71);
+
         return [
-            'p1' => ['required', 'numeric', 'min:0'],
-            'p2' => ['required', 'numeric', 'min:0'],
-            'p3' => ['required', 'numeric', 'min:0'],
-            'p4' => ['required', 'numeric', 'min:0'],
+            'p1' => ['required', 'numeric', 'min:0', 'max:'.$maxTankPressurePsi],
+            'p2' => ['required', 'numeric', 'min:0', 'max:'.$maxTankPressurePsi],
+            'p3' => ['required', 'numeric', 'min:0', 'max:'.$maxTankPressurePsi],
+            'p4' => ['required', 'numeric', 'min:0', 'max:'.$maxTankPressurePsi],
             'pressure_unit' => ['prohibited'],
             'factor_used' => ['prohibited'],
             'factor' => ['prohibited'],
@@ -50,6 +52,10 @@ class StoreStockReadingRequest extends FormRequest
             'p2.min' => 'Pressure p2 cannot be negative.',
             'p3.min' => 'Pressure p3 cannot be negative.',
             'p4.min' => 'Pressure p4 cannot be negative.',
+            'p1.max' => 'Pressure p1 exceeds the allowed operational limit.',
+            'p2.max' => 'Pressure p2 exceeds the allowed operational limit.',
+            'p3.max' => 'Pressure p3 exceeds the allowed operational limit.',
+            'p4.max' => 'Pressure p4 exceeds the allowed operational limit.',
             'pressure_unit.prohibited' => 'pressure_unit is controlled by the server.',
             'factor_used.prohibited' => 'factor_used is controlled by the server.',
             'factor.prohibited' => 'factor is controlled by the server.',
